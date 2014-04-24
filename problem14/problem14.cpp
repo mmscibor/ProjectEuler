@@ -1,46 +1,43 @@
 #include <iostream>
 using namespace std;
 
-#define ELEMENTS 1000000
-#define SUBSET 100000
-#define STARTPOINT 800000
+#define LIMIT 1000000
 
-int determinedLengths [ELEMENTS];
-int length = 1, determinedNum = 0;
-
-int collatzChain(int collatzNum){
-    if (collatzNum == 1){
-        return length;
-    }
-
-    if (collatzNum <= determinedNum) {
-        return length + determinedLengths[collatzNum-1] - 1;
-    }
-
-    length++;
-
-    if (collatzNum % 2 == 0){
-        collatzNum = collatzNum / 2;
-        collatzChain(collatzNum);
+long collatzIterator(long value) {
+    if (value % 2 == 0) {
+        return (value / 2);
     } else {
-        collatzNum = collatzNum * 3 + 1;
-        collatzChain(collatzNum);
+        return ((3 * value) + 1);
     }
 }
 
-int main(){ 
-    for (int i=0; i < SUBSET; i++) {
-        determinedLengths[i] = collatzChain(i+1);
-        determinedNum = i+1;
-        length = 1;
+int main() {
+    int maxLength = 1;
+    int maxValue = 1;
+
+    long * collatzValue = new long[LIMIT];
+
+    for (long initialValue = 1; initialValue < LIMIT; initialValue++) {
+        long value = initialValue;
+        int length = 1;
+        while (value != 1) {
+            value = collatzIterator(value);
+            if (value < initialValue) {
+                length += collatzValue[value - 1];
+                break;
+            }
+            length++;
+        }
+        collatzValue[initialValue - 1] = length;
     }
-/*    
-    for (int i=STARTPOINT; i < ELEMENTS; i++) { 
-        determinedLengths[i] = collatzChain(i+1);
-        length = 1;
+
+    for (int iterator = 1; iterator < LIMIT; iterator++) {
+        if (collatzValue[iterator] > maxLength) {
+            maxValue = iterator;
+            maxLength = collatzValue[iterator - 1];
+        }
     }
-*/
-    for (int i=0; i < ELEMENTS; i++) {
-        cout << determinedLengths[i] << endl;
-    }
+
+    cout << "Longest chain at value: " << maxValue << endl;
+    cout << "Chain length: " << maxLength << endl;
 }
