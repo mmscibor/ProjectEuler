@@ -6,7 +6,7 @@ using namespace std;
 int multOfThree[MAX_VALUE], multOfFive[MAX_VALUE]; // Initializes to 0, useful
 
 int main() {
-    // Fine all multiples of 3 and 5
+    // Find all multiples of 3 and 5
     for (int i = 3, j = 0; i < 1000; i += 3, j++) {
         multOfThree[j] = i;
     }
